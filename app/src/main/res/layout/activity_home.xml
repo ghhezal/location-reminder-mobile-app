@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:layout_width="match_parent"
+
+    android:layout_height="match_parent"
+
+    android:orientation="vertical"
+
+    android:gravity="center"
+
+    android:background="@drawable/background"
+
+    tools:context=".HomeActivity">
+
+
+
+
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+
+        android:layout_height="wrap_content"
+
+        android:layout_margin="32dp"
+
+        android:background="@drawable/bg_login_card"
+
+        android:orientation="vertical"
+
+        android:padding="24dp">
+
+
+
+        <TextView
+
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+
+            android:layout_gravity="center"
+
+            android:layout_marginTop="16dp"
+
+            android:text=" Location\nReminder"
+
+            android:textColor="@color/white"
+
+            android:textSize="34sp"
+
+            android:textStyle="bold" />
+
+
+
+        <TextView
+
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="22dp"
+
+            android:text="Latitude:"
+
+            android:textSize="25sp"
+
+            android:textStyle="bold"
+
+            android:textColor="@color/text" />
+
+
+
+        <EditText
+
+            android:id="@+id/latitude"
+
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="5dp"
+
+            android:background="@drawable/bg_input_field"
+
+            android:hint="waiting..."
+
+            android:textAlignment="center"
+
+            android:clickable="false"
+
+            android:focusable="false"
+
+            android:textSize="18sp"
+
+            android:padding="16dp"
+
+            android:textColor="@color/white"
+
+            android:textColorHint="@color/text" />
+
+
+
+        <TextView
+
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="22dp"
+
+            android:text="Longitude:"
+
+            android:textSize="25sp"
+
+            android:textStyle="bold"
+
+            android:textColor="@color/text" />
+
+
+
+        <EditText
+
+            android:id="@+id/longitude"
+
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="5dp"
+
+            android:background="@drawable/bg_input_field"
+
+            android:hint="waiting..."
+
+            android:textAlignment="center"
+
+            android:clickable="false"
+
+            android:focusable="false"
+
+            android:textSize="18sp"
+
+            android:padding="16dp"
+
+            android:textColor="@color/white"
+
+            android:textColorHint="@color/text" />
+
+
+
+
+
+        <androidx.appcompat.widget.AppCompatButton
+
+            android:id="@+id/updateLocation"
+
+            android:layout_width="match_parent"
+
+            android:layout_height="60dp"
+
+            android:layout_marginTop="40dp"
+
+            android:layout_marginBottom="10dp"
+
+            android:background="@drawable/bg_button_gradient"
+
+            android:text="Update Location"
+
+            android:textAllCaps="false"
+
+            android:textColor="@color/white"
+
+            android:textSize="18sp"
+
+            android:textStyle="bold" />
+
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
