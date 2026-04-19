@@ -4,6 +4,7 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import java.util.List;
 
@@ -12,11 +13,11 @@ public interface UserDao {
     @Insert
     void registerUser(User user);
 
-    @Query("SELECT * FROM users WHERE username = :username AND password = :password")
-    User login(String username, String password);
+    @Query("SELECT * FROM users WHERE email = :email AND password = :password")
+    User login(String email, String password);
 
-    @Query("SELECT * FROM users WHERE username = :username")
-    User checkUser(String username);
+    @Query("SELECT * FROM users WHERE email = :email")
+    User checkUser(String email);
 
 
     @Insert
@@ -31,6 +32,12 @@ public interface UserDao {
     @Delete
     void deleteReminder(Reminder reminder);
 
-    @Query("UPDATE users SET password = :newPassword WHERE username = :username")
-    void updatePassword(String username, String newPassword);
+    @Query("UPDATE users SET password = :newPassword WHERE email = :email")
+    void updatePassword(String email, String newPassword);
+
+    @Update
+    void updateReminder(Reminder reminder);
+
+    @Query("SELECT passwordHint FROM users WHERE email = :email")
+    String getPasswordHint(String email);
 }

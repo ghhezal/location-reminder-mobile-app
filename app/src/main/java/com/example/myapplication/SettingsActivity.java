@@ -3,7 +3,7 @@ package com.example.myapplication;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.ImageButton; // Changed from ImageView to match your XML
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,20 +11,17 @@ import com.google.android.material.button.MaterialButton;
 
 public class SettingsActivity extends AppCompatActivity {
 
-
-    ImageView btnSettingsBack;
+    ImageButton btnSettingsBack;
     TextView tvLoggedUser;
     EditText etCurrentPass, etNewPass, etConfirmPass;
     MaterialButton btnUpdatePass, btnLogout;
 
-
-    String currentUser = "";
+    String userEmail = ""; // Changed from currentUser
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_activity);
-
 
         btnSettingsBack = findViewById(R.id.btnSettingsBack);
         tvLoggedUser = findViewById(R.id.tvLoggedUser);
@@ -34,12 +31,13 @@ public class SettingsActivity extends AppCompatActivity {
         btnUpdatePass = findViewById(R.id.btnUpdatePass);
         btnLogout = findViewById(R.id.btnLogout);
 
+        // Get Email from Intent (Passed from HomeActivity)
+        userEmail = getIntent().getStringExtra("USER_EMAIL");
 
-        currentUser = getIntent().getStringExtra("USER_NAME");
-        if (currentUser == null || currentUser.isEmpty()) {
-            currentUser = "Amine"; // Fallback just in case
+        if (userEmail == null || userEmail.isEmpty()) {
+            userEmail = "User"; // Fallback
         }
-        tvLoggedUser.setText(currentUser);
+        tvLoggedUser.setText(userEmail);
 
         btnSettingsBack.setOnClickListener(v -> finish());
 
@@ -60,14 +58,15 @@ public class SettingsActivity extends AppCompatActivity {
 
             AppDatabase db = AppDatabase.getInstance(this);
 
-
-            User verifiedUser = db.userDao().login(currentUser, current);
+            // 1. Verify current password using email
+            User verifiedUser = db.userDao().login(userEmail, current);
 
             if (verifiedUser != null) {
-                // The current password is correct, so update it!
-                db.userDao().updatePassword(currentUser, newPass);
+                // 2. Update to new password using email
+                db.userDao().updatePassword(userEmail, newPass);
                 Toast.makeText(this, "Password Updated Successfully!", Toast.LENGTH_SHORT).show();
 
+                // Clear fields after success
                 etCurrentPass.setText("");
                 etNewPass.setText("");
                 etConfirmPass.setText("");
@@ -77,7 +76,7 @@ public class SettingsActivity extends AppCompatActivity {
         });
 
         btnLogout.setOnClickListener(v -> {
-            // Return to Login and clear the back-stack so they can't press "Back" to get in
+            // Clear the activity stack and return to Login
             Intent intent = new Intent(this, Login.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);

@@ -8,11 +8,13 @@ public class User {
     @PrimaryKey(autoGenerate = true)
     public int id;
 
-    public String username;
+    public String email;
     public String password;
+    public String passwordHint;
 
-    public User(String username, String password) {
-        this.username = username;
+    public User(String email, String password, String passwordHint) {
+        this.email = email;
         this.password = password;
+        this.passwordHint = passwordHint;
     }
 }
