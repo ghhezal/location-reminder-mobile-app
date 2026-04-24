@@ -19,7 +19,7 @@ public class GeofenceHelper extends ContextWrapper {
     public GeofencingRequest getGeofencingRequest(Geofence geofence) {
         return new GeofencingRequest.Builder()
                 .addGeofence(geofence)
-                .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
+                .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER | GeofencingRequest.INITIAL_TRIGGER_DWELL)
                 .build();
     }
 
@@ -27,8 +27,9 @@ public class GeofenceHelper extends ContextWrapper {
     public Geofence getGeofence(String ID, double lat, double lon, float radius) {
         return new Geofence.Builder()
                 .setCircularRegion(lat, lon, radius)
-                .setRequestId(ID) // We use the Reminder Name or ID here
-                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
+                .setRequestId(ID)
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_DWELL) // Added DWELL
+                .setLoiteringDelay(5000) // 5 seconds of staying inside before DWELL fires
                 .setExpirationDuration(Geofence.NEVER_EXPIRE)
                 .build();
     }

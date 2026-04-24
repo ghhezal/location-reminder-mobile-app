@@ -1,10 +1,13 @@
 package com.example.myapplication;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.widget.ImageButton;
 import java.util.List;
 
 public class MyRemindersActivity extends AppCompatActivity {
@@ -19,27 +22,67 @@ public class MyRemindersActivity extends AppCompatActivity {
 
         userDao = AppDatabase.getInstance(this).userDao();
         rvReminders = findViewById(R.id.rvReminders);
-        rvReminders.setLayoutManager(new LinearLayoutManager(this));
+        ImageButton btnSettings = findViewById(R.id.btnSettings);
 
-        ImageButton btnBack = findViewById(R.id.btnBack);
-        btnBack.setOnClickListener(v -> finish());
+        if (rvReminders != null) {
+            rvReminders.setLayoutManager(new LinearLayoutManager(this));
+        }
+
+        // Navbar - Location Button
+        View btnMyLocation = findViewById(R.id.btnMyLocation);
+        if (btnMyLocation != null) {
+            btnMyLocation.setOnClickListener(v -> {
+                // Open Map since we came from Login
+                startActivity(new Intent(this, HomeActivity.class));
+            });
+        }
+
+        btnSettings.setOnClickListener(v -> {
+            Intent intent = new Intent(MyRemindersActivity.this, SettingsActivity.class);
+            // Get the email that was passed from Login to Home, then pass it to Settings
+            String email = getIntent().getStringExtra("USER_EMAIL");
+            intent.putExtra("USER_EMAIL", email);
+            startActivity(intent);
+        });
+
+        // Navbar - Plus Button
+        View btnAddReminder = findViewById(R.id.btnAddReminder);
+        if (btnAddReminder != null) {
+            btnAddReminder.setOnClickListener(v -> {
+                startActivity(new Intent(this, AddReminderActivity.class));
+            });
+        }
+
+        // Navbar - Home Button
+        View btnMyReminders = findViewById(R.id.btnMyReminders);
+        if (btnMyReminders != null) {
+            btnMyReminders.setOnClickListener(v -> {
+                if (rvReminders != null) rvReminders.smoothScrollToPosition(0);
+            });
+        }
 
         loadReminders();
     }
 
     private void loadReminders() {
         new Thread(() -> {
-            List<Reminder> list = userDao.getAllReminders();
-            runOnUiThread(() -> {
-                ReminderAdapter adapter = new ReminderAdapter(list, this);
-                rvReminders.setAdapter(adapter);
-            });
+            try {
+                List<Reminder> list = userDao.getAllReminders();
+                runOnUiThread(() -> {
+                    if (rvReminders != null) {
+                        ReminderAdapter adapter = new ReminderAdapter(list, this);
+                        rvReminders.setAdapter(adapter);
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }).start();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        loadReminders(); // Refresh list if a reminder was edited
+        loadReminders();
     }
 }

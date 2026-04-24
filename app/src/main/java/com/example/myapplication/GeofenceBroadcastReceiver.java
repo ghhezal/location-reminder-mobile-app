@@ -6,6 +6,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.widget.Toast;
+
 import androidx.core.app.NotificationCompat;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
@@ -15,15 +17,27 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        Toast.makeText(context, "test", Toast.LENGTH_SHORT).show();
+
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
         if (geofencingEvent == null || geofencingEvent.hasError()) {
             return;
         }
 
-        List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
-        for (Geofence geofence : triggeringGeofences) {
-            // This is the notification that pops up on the phone
-            sendNotification(context, "Location Reminder", "You arrived at: " + geofence.getRequestId());
+        // Identify the type of transition (Enter vs. Dwell)
+        int transitionType = geofencingEvent.getGeofenceTransition();
+
+        // Check if the user entered OR has been staying (dwelling) in the area
+        if (transitionType == Geofence.GEOFENCE_TRANSITION_ENTER ||
+                transitionType == Geofence.GEOFENCE_TRANSITION_DWELL) {
+
+            List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
+            if (triggeringGeofences != null) {
+                for (Geofence geofence : triggeringGeofences) {
+                    // Send notification using the ID (Reminder Name)
+                    sendNotification(context, "Location Reminder", "You are at: " + geofence.getRequestId());
+                }
+            }
         }
     }
 

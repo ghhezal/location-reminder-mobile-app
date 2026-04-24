@@ -74,7 +74,7 @@ public class Login extends AppCompatActivity {
                     User registeredUser = db.userDao().login(emailStr, pass);
 
                     if (registeredUser != null) {
-                        Intent intent = new Intent(Login.this, HomeActivity.class);
+                        Intent intent = new Intent(Login.this, MyRemindersActivity.class);
                         // Pass USER_EMAIL to the Home screen
                         intent.putExtra("USER_EMAIL", emailStr);
                         startActivity(intent);

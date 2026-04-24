@@ -20,7 +20,7 @@ public class Welcome extends AppCompatActivity {
         getStartedBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Welcome.this, Login.class);
+                Intent intent = new Intent(Welcome.this, WalkthroughActivity.class);
                 startActivity(intent);
                 finish();
             }

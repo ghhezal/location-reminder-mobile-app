@@ -42,7 +42,11 @@ public class SignUp extends AppCompatActivity {
             }
             else if (!pass.equals(confirm)) {
                 Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show();
-            } else {
+            }
+            else if (pass.length()<8){
+                Toast.makeText(this, "Password length should be greater than 8 characters", Toast.LENGTH_SHORT).show();
+            }
+                else {
                 AppDatabase db = AppDatabase.getInstance(this);
 
                 // Check if email already exists in the database

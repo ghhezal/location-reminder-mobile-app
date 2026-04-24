@@ -8,6 +8,7 @@ import android.location.Location;
 import android.os.Build; // Added for version checks
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -43,6 +44,12 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 102);
+            }
+        }
+
         Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
         Configuration.getInstance().setUserAgentValue(getPackageName());
         setContentView(R.layout.activity_home);
@@ -50,9 +57,9 @@ public class HomeActivity extends AppCompatActivity {
         userDao = AppDatabase.getInstance(this).userDao();
 
         map = findViewById(R.id.map);
-        AppCompatButton btnMyLocation = findViewById(R.id.btnMyLocation);
-        AppCompatButton btnAddReminder = findViewById(R.id.btnAddReminder);
-        AppCompatButton btnMyReminders = findViewById(R.id.btnMyReminders);
+        View btnMyLocation = findViewById(R.id.btnMyLocation);
+        View btnAddReminder = findViewById(R.id.btnAddReminder);
+        View btnMyReminders = findViewById(R.id.btnMyReminders);
         ImageButton btnSettings = findViewById(R.id.btnSettings);
 
         map.setTileSource(TileSourceFactory.MAPNIK);
