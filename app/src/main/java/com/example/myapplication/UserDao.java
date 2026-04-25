@@ -40,4 +40,7 @@ public interface UserDao {
 
     @Query("SELECT passwordHint FROM users WHERE email = :email")
     String getPasswordHint(String email);
+
+    @Query("UPDATE users SET profileImage = :imagePath WHERE email = :email")
+    void updateProfileImage(String email, String imagePath);
 }
