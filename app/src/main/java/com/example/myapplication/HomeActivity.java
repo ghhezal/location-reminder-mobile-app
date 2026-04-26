@@ -71,7 +71,9 @@ public class HomeActivity extends AppCompatActivity {
         btnMyLocation.setOnClickListener(v -> getLocation());
 
         btnAddReminder.setOnClickListener(v -> {
-            startActivity(new Intent(HomeActivity.this, AddReminderActivity.class));
+            Intent intent = new Intent(HomeActivity.this, AddReminderActivity.class);
+            intent.putExtra("USER_EMAIL", getIntent().getStringExtra("USER_EMAIL"));
+            startActivity(intent);
         });
 
         btnSettings.setOnClickListener(v -> {
@@ -83,7 +85,9 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         btnMyReminders.setOnClickListener(v -> {
-            startActivity(new Intent(HomeActivity.this, MyRemindersActivity.class));
+            Intent intent = new Intent(HomeActivity.this, MyRemindersActivity.class);
+            intent.putExtra("USER_EMAIL", getIntent().getStringExtra("USER_EMAIL"));
+            startActivity(intent);
         });
 
         getLocation();

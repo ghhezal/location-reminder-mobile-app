@@ -3,13 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F4F4F4">
+    android:background="@color/colorBackground">
 
     <LinearLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:background="@color/colorTopBar"
         android:padding="20dp">
 
         <ImageButton
@@ -18,7 +19,7 @@
             android:layout_height="40dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_back"
-            app:tint="@color/black" />
+            app:tint="@color/colorIconTint" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -26,7 +27,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginBottom="30dp"
             android:text="Add Reminder"
-            android:textColor="@color/black"
+            android:textColor="@color/colorOnSurface"
             android:textSize="32sp"
             android:textStyle="bold" />
 
@@ -34,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Name"
-            android:textColor="#888888"
+            android:textColor="@color/colorSubtext"
             android:textSize="14sp" />
 
         <EditText
@@ -46,13 +47,14 @@
             android:background="@drawable/bg_input_light"
             android:hint="Home, Grocery, etc."
             android:padding="16dp"
-            android:textColor="@color/black" />
+            android:textColor="@color/colorOnSurface"
+            android:textColorHint="@color/colorSubtext" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Description"
-            android:textColor="#888888"
+            android:textColor="@color/colorSubtext"
             android:textSize="14sp" />
 
         <EditText
@@ -64,7 +66,8 @@
             android:background="@drawable/bg_input_light"
             android:hint="What do you need to do?"
             android:padding="16dp"
-            android:textColor="@color/black" />
+            android:textColor="@color/colorOnSurface"
+            android:textColorHint="@color/colorSubtext" />
     </LinearLayout>
 
     <FrameLayout

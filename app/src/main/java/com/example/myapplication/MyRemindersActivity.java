@@ -33,7 +33,9 @@ public class MyRemindersActivity extends AppCompatActivity {
         if (btnMyLocation != null) {
             btnMyLocation.setOnClickListener(v -> {
                 // Open Map since we came from Login
-                startActivity(new Intent(this, HomeActivity.class));
+                Intent intent = new Intent(this, HomeActivity.class);
+                intent.putExtra("USER_EMAIL", getIntent().getStringExtra("USER_EMAIL"));
+                startActivity(intent);
             });
         }
 
@@ -49,7 +51,9 @@ public class MyRemindersActivity extends AppCompatActivity {
         View btnAddReminder = findViewById(R.id.btnAddReminder);
         if (btnAddReminder != null) {
             btnAddReminder.setOnClickListener(v -> {
-                startActivity(new Intent(this, AddReminderActivity.class));
+                Intent intent = new Intent(this, AddReminderActivity.class);
+                intent.putExtra("USER_EMAIL", getIntent().getStringExtra("USER_EMAIL"));
+                startActivity(intent);
             });
         }
 
