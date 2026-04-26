@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.EditText;
-import android.widget.ImageButton;
+import android.widget.ImageButton; // Changed from ImageView to match your XML
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,7 +13,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.switchmaterial.SwitchMaterial;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -26,9 +25,8 @@ public class SettingsActivity extends AppCompatActivity {
     EditText etCurrentPass, etNewPass, etConfirmPass;
     MaterialButton btnUpdatePass, btnLogout;
     ImageView ivSettingsProfile, btnChangePicture;
-    SwitchMaterial switchDarkMode;
 
-    String userEmail = "";
+    String userEmail = ""; // Changed from currentUser
 
     private final ActivityResultLauncher<String> mGetContent = registerForActivityResult(
             new ActivityResultContracts.GetContent(),
@@ -69,59 +67,55 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.settings_activity);
 
         btnSettingsBack = findViewById(R.id.btnSettingsBack);
-        tvLoggedUser    = findViewById(R.id.tvLoggedUser);
-        etCurrentPass   = findViewById(R.id.etCurrentPass);
-        etNewPass       = findViewById(R.id.etNewPass);
-        etConfirmPass   = findViewById(R.id.etConfirmPass);
-        btnUpdatePass   = findViewById(R.id.btnUpdatePass);
-        btnLogout       = findViewById(R.id.btnLogout);
-        ivSettingsProfile  = findViewById(R.id.ivSettingsProfile);
-        btnChangePicture   = findViewById(R.id.btnChangePicture);
-        switchDarkMode     = findViewById(R.id.switchDarkMode);
+        tvLoggedUser = findViewById(R.id.tvLoggedUser);
+        etCurrentPass = findViewById(R.id.etCurrentPass);
+        etNewPass = findViewById(R.id.etNewPass);
+        etConfirmPass = findViewById(R.id.etConfirmPass);
+        btnUpdatePass = findViewById(R.id.btnUpdatePass);
+        btnLogout = findViewById(R.id.btnLogout);
+        ivSettingsProfile = findViewById(R.id.ivSettingsProfile);
+        btnChangePicture = findViewById(R.id.btnChangePicture);
 
-        // ---------- Email ----------
+        // Get Email from Intent (Passed from HomeActivity)
         userEmail = getIntent().getStringExtra("USER_EMAIL");
-        if (userEmail == null || userEmail.isEmpty()) userEmail = "User";
+
+        if (userEmail == null || userEmail.isEmpty()) {
+            userEmail = "User"; // Fallback
+        }
         tvLoggedUser.setText(userEmail);
 
         loadUserProfile();
 
-        // ---------- Dark mode toggle ----------
-        // Reflect the currently saved preference without triggering the listener
-        switchDarkMode.setChecked(ThemeHelper.isDarkModeEnabled(this));
-        switchDarkMode.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            ThemeHelper.setDarkMode(this, isChecked);
-            // recreate() is called automatically by AppCompatDelegate when the mode changes,
-            // but we call it explicitly to refresh the activity immediately.
-            recreate();
-        });
-
-        // ---------- Navigation ----------
         btnSettingsBack.setOnClickListener(v -> finish());
         btnChangePicture.setOnClickListener(v -> mGetContent.launch("image/*"));
         ivSettingsProfile.setOnClickListener(v -> mGetContent.launch("image/*"));
 
-        // ---------- Change password ----------
         btnUpdatePass.setOnClickListener(v -> {
-            String current     = etCurrentPass.getText().toString().trim();
-            String newPass     = etNewPass.getText().toString().trim();
+            String current = etCurrentPass.getText().toString().trim();
+            String newPass = etNewPass.getText().toString().trim();
             String confirmPass = etConfirmPass.getText().toString().trim();
 
             if (current.isEmpty() || newPass.isEmpty() || confirmPass.isEmpty()) {
                 Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
                 return;
             }
+
             if (!newPass.equals(confirmPass)) {
                 Toast.makeText(this, "New passwords do not match", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             AppDatabase db = AppDatabase.getInstance(this);
+
+            // 1. Verify current password using email
             User verifiedUser = db.userDao().login(userEmail, current);
 
             if (verifiedUser != null) {
+                // 2. Update to new password using email
                 db.userDao().updatePassword(userEmail, newPass);
                 Toast.makeText(this, "Password Updated Successfully!", Toast.LENGTH_SHORT).show();
+
+                // Clear fields after success
                 etCurrentPass.setText("");
                 etNewPass.setText("");
                 etConfirmPass.setText("");
@@ -130,8 +124,8 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
-        // ---------- Logout ----------
         btnLogout.setOnClickListener(v -> {
+            // Clear the activity stack and return to Login
             Intent intent = new Intent(this, Login.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
@@ -154,8 +148,9 @@ public class SettingsActivity extends AppCompatActivity {
         new Thread(() -> {
             AppDatabase db = AppDatabase.getInstance(this);
             db.userDao().updateProfileImage(userEmail, imagePath);
-            runOnUiThread(() ->
-                    Toast.makeText(this, "Profile Picture Updated!", Toast.LENGTH_SHORT).show());
+            runOnUiThread(() -> {
+                Toast.makeText(this, "Profile Picture Updated!", Toast.LENGTH_SHORT).show();
+            });
         }).start();
     }
 }

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground">
+    android:background="#F4F4F4">
 
     <RelativeLayout
         android:id="@+id/topHeader"
@@ -12,7 +12,7 @@
         android:paddingHorizontal="20dp"
         android:paddingTop="35dp"
         android:layout_marginBottom="10dp"
-        android:background="@color/colorTopBar">
+        android:background="@color/white">
 
         <TextView
             android:layout_width="wrap_content"
@@ -21,7 +21,7 @@
             android:layout_centerVertical="true"
             android:text="My Reminders"
             android:layout_marginTop="18dp"
-            android:textColor="@color/colorTopBarText"
+            android:textColor="@color/black"
             android:textSize="28sp"
             android:textStyle="bold" />
 
@@ -34,7 +34,7 @@
             android:layout_centerVertical="true"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_settings_dots"
-            app:tint="@color/colorIconTint" />
+            app:tint="@color/black" />
     </RelativeLayout>
 
     <LinearLayout
@@ -63,7 +63,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            android:background="@drawable/bg_nav_pill"
+            android:background="@drawable/bg_nav_bar"
             android:elevation="10dp"
             app:layout_constraintBottom_toBottomOf="parent" />
 
@@ -126,7 +126,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Location"
-                android:textColor="@color/colorSubtext"
+                android:textColor="#9E9E9E"
                 android:layout_marginBottom="7dp"
                 android:textSize="16sp" />
         </LinearLayout>
