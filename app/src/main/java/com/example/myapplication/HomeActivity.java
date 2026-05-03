@@ -90,7 +90,24 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        checkBatteryOptimization();
         getLocation();
+        startLocationService();
+    }
+
+    private void startLocationService() {
+        Intent serviceIntent = new Intent(this, LocationService.class);
+        ContextCompat.startForegroundService(this, serviceIntent);
+    }
+
+    private void checkBatteryOptimization() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            String packageName = getPackageName();
+            android.os.PowerManager pm = (android.os.PowerManager) getSystemService(android.content.Context.POWER_SERVICE);
+            if (pm != null && !pm.isIgnoringBatteryOptimizations(packageName)) {
+                Toast.makeText(this, "Please disable battery optimization for this app to ensure reliable reminders.", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     private void displayReminders() {

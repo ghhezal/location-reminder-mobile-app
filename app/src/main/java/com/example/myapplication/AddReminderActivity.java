@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -120,8 +121,24 @@ public class AddReminderActivity extends AppCompatActivity {
             return;
         }
 
-        // We use mapPicker.getMapCenter() so the reminder is saved where the
-        // green center icon is pointing, not necessarily where the user is standing.
+        // Check Notification Permission (Android 13+)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 102);
+                Toast.makeText(this, "Notification permission is required for alerts", Toast.LENGTH_LONG).show();
+                return;
+            }
+        }
+
+        // Check Background Location Permission
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, 101);
+                Toast.makeText(this, "Background location permission is required for reminders", Toast.LENGTH_LONG).show();
+                return;
+            }
+        }
+
         double lat = mapPicker.getMapCenter().getLatitude();
         double lon = mapPicker.getMapCenter().getLongitude();
 
@@ -131,21 +148,26 @@ public class AddReminderActivity extends AppCompatActivity {
             userDao.addReminder(newReminder);
             runOnUiThread(() -> {
                 addGeofence(name, lat, lon);
-                Toast.makeText(this, "Reminder Saved!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Reminder Saved and Geofence Active!", Toast.LENGTH_SHORT).show();
                 finish();
             });
         }).start();
     }
 
     private void addGeofence(String name, double lat, double lon) {
-        Geofence geofence = geofenceHelper.getGeofence(name, lat, lon, 200);
+        Geofence geofence = geofenceHelper.getGeofence(name, lat, lon, 500);
         com.google.android.gms.location.GeofencingRequest request = geofenceHelper.getGeofencingRequest(geofence);
         android.app.PendingIntent pendingIntent = geofenceHelper.getPendingIntent();
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             geofencingClient.addGeofences(request, pendingIntent)
-                    .addOnSuccessListener(aVoid -> Log.d("Geofence", "Added successfully"))
-                    .addOnFailureListener(e -> Log.e("Geofence", "Failed: " + e.getMessage()));
+                    .addOnSuccessListener(aVoid -> Log.d("Geofence", "Added successfully: " + name))
+                    .addOnFailureListener(e -> {
+                        Log.e("Geofence", "Failed to add: " + e.getMessage());
+                        Toast.makeText(this, "Failed to activate geofence: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    });
+        } else {
+            Toast.makeText(this, "Fine location permission missing", Toast.LENGTH_SHORT).show();
         }
     }
 
