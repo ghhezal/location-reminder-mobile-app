@@ -118,6 +118,7 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
                 for (Reminder reminder : reminders) {
                     if (reminder.isActive) {
                         Geofence geofence = geofenceHelper.getGeofence(reminder.name, reminder.latitude, reminder.longitude, 500);
+                        // The GeofenceHelper already includes setNotificationResponsiveness(1000)
                         com.google.android.gms.location.GeofencingRequest request = geofenceHelper.getGeofencingRequest(geofence);
                         android.app.PendingIntent pendingIntent = geofenceHelper.getPendingIntent();
 

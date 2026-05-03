@@ -29,6 +29,7 @@ public class GeofenceHelper extends ContextWrapper {
                 .setCircularRegion(lat, lon, radius)
                 .setRequestId(ID)
                 .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
+                .setNotificationResponsiveness(1000) // 1 second responsiveness
                 .setExpirationDuration(Geofence.NEVER_EXPIRE)
                 .build();
     }

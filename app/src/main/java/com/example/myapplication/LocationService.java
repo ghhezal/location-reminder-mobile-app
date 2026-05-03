@@ -60,8 +60,8 @@ public class LocationService extends Service {
     }
 
     private void startLocationUpdates() {
-        LocationRequest locationRequest = new LocationRequest.Builder(Priority.PRIORITY_BALANCED_POWER_ACCURACY, 60000)
-                .setMinUpdateIntervalMillis(30000)
+        LocationRequest locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 10000)
+                .setMinUpdateIntervalMillis(5000)
                 .build();
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {

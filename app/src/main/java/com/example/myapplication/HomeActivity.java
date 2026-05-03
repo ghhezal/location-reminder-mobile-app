@@ -91,6 +91,7 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         checkBatteryOptimization();
+        checkLocationSettings();
         getLocation();
         startLocationService();
     }
@@ -107,6 +108,24 @@ public class HomeActivity extends AppCompatActivity {
             if (pm != null && !pm.isIgnoringBatteryOptimizations(packageName)) {
                 Toast.makeText(this, "Please disable battery optimization for this app to ensure reliable reminders.", Toast.LENGTH_LONG).show();
             }
+        }
+    }
+
+    private void checkLocationSettings() {
+        android.location.LocationManager lm = (android.location.LocationManager) getSystemService(android.content.Context.LOCATION_SERVICE);
+        boolean gps_enabled = false;
+        boolean network_enabled = false;
+
+        try {
+            gps_enabled = lm.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER);
+        } catch (Exception ex) {}
+
+        try {
+            network_enabled = lm.isProviderEnabled(android.location.LocationManager.NETWORK_PROVIDER);
+        } catch (Exception ex) {}
+
+        if (!gps_enabled && !network_enabled) {
+            Toast.makeText(this, "Location services are disabled. Reminders will not work.", Toast.LENGTH_LONG).show();
         }
     }
 
