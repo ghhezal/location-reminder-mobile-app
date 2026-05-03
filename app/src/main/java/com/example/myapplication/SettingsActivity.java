@@ -107,12 +107,13 @@ public class SettingsActivity extends AppCompatActivity {
 
             AppDatabase db = AppDatabase.getInstance(this);
 
-            // 1. Verify current password using email
-            User verifiedUser = db.userDao().login(userEmail, current);
+            // 1. Fetch user to verify current password
+            User currentUser = db.userDao().checkUser(userEmail);
 
-            if (verifiedUser != null) {
-                // 2. Update to new password using email
-                db.userDao().updatePassword(userEmail, newPass);
+            if (currentUser != null && PasswordUtils.verifyPassword(current, currentUser.password)) {
+                // 2. Hash new password and update
+                String hashedNewPass = PasswordUtils.hashPassword(newPass);
+                db.userDao().updatePassword(userEmail, hashedNewPass);
                 Toast.makeText(this, "Password Updated Successfully!", Toast.LENGTH_SHORT).show();
 
                 // Clear fields after success

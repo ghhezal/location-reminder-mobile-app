@@ -101,8 +101,10 @@ public class SignUp extends AppCompatActivity {
                 if (db.userDao().checkUser(emailStr) != null) {
                     Toast.makeText(this, "User with this email already exists", Toast.LENGTH_SHORT).show();
                 } else {
+                    // Hash the password before saving
+                    String hashedPassword = PasswordUtils.hashPassword(pass);
                     // Create user with Email, Password, Hint, and Profile Image
-                    db.userDao().registerUser(new User(emailStr, pass, hint, selectedImagePath));
+                    db.userDao().registerUser(new User(emailStr, hashedPassword, hint, selectedImagePath));
                     Toast.makeText(this, "Registration Successful!", Toast.LENGTH_SHORT).show();
                     finish();
                 }

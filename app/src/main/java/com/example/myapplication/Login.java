@@ -70,11 +70,12 @@ public class Login extends AppCompatActivity {
                 }
                 else {
                     AppDatabase db = AppDatabase.getInstance(Login.this);
-                    // Login using email and password
-                    User registeredUser = db.userDao().login(emailStr, pass);
+                    // Fetch user by email
+                    User registeredUser = db.userDao().checkUser(emailStr);
 
-                    if (registeredUser != null) {
-                        Intent intent = new Intent(Login.this, MyRemindersActivity.class);
+                    // Verify hashed password
+                    if (registeredUser != null && PasswordUtils.verifyPassword(pass, registeredUser.password)) {
+                        Intent intent = new Intent(Login.this, HomeActivity.class);
                         // Pass USER_EMAIL to the Home screen
                         intent.putExtra("USER_EMAIL", emailStr);
                         startActivity(intent);
